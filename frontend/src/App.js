@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
+import CartScreen from "./screens/CartScreen";
 
 const App = () => {
   return (
@@ -20,6 +21,11 @@ const App = () => {
             exact
             path="/product/:id"
             component={ProductScreen}
+          />
+          <Route
+            exact
+            path="/cart/:id?"
+            component={CartScreen}
           />
         </Container>
       </main>
