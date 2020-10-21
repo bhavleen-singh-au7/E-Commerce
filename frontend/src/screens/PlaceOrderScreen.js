@@ -1,4 +1,5 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Button,
   Row,
@@ -10,12 +11,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
-import { Link } from "react-router-dom";
 
 const PlaceOrderScreen = () => {
   const cart = useSelector((state) => state.cart);
 
-  // Calculate Prices
+  //   Calculate prices
   const addDecimals = (num) => {
     return (Math.round(num * 100) / 100).toFixed(2);
   };
@@ -26,26 +26,24 @@ const PlaceOrderScreen = () => {
       0
     )
   );
-
   cart.shippingPrice = addDecimals(
     cart.itemsPrice > 100 ? 0 : 100
   );
-
   cart.taxPrice = addDecimals(
     Number((0.15 * cart.itemsPrice).toFixed(2))
   );
-
-  cart.totalPrice =
+  cart.totalPrice = (
     Number(cart.itemsPrice) +
     Number(cart.shippingPrice) +
-    Number(cart.taxPrice).toFixed(2);
+    Number(cart.taxPrice)
+  ).toFixed(2);
 
   const placeOrderHandler = () => {
-    console.log("object");
+    console.log("order");
   };
 
   return (
-    <Fragment>
+    <>
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
         <Col md={8}>
@@ -53,13 +51,14 @@ const PlaceOrderScreen = () => {
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
-                <strong>Address: </strong>
+                <strong>Address:</strong>
                 {cart.shippingAddress.address},{" "}
-                {cart.shippingAddress.city},{" "}
+                {cart.shippingAddress.city}{" "}
                 {cart.shippingAddress.postalCode},{" "}
                 {cart.shippingAddress.country}
               </p>
             </ListGroup.Item>
+
             <ListGroup.Item>
               <h2>Payment Method</h2>
               <strong>Method: </strong>
@@ -83,7 +82,7 @@ const PlaceOrderScreen = () => {
                             rounded
                           />
                         </Col>
-                        <Col md={1}>
+                        <Col>
                           <Link
                             to={`/product/${item.product}`}
                           >
@@ -92,7 +91,7 @@ const PlaceOrderScreen = () => {
                         </Col>
                         <Col md={4}>
                           {item.qty} x ${item.price} = $
-                          {item.qty * item.price}{" "}
+                          {item.qty * item.price}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -108,40 +107,35 @@ const PlaceOrderScreen = () => {
               <ListGroup.Item>
                 <h2>Order Summary</h2>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>${cart.itemPrice}</Col>
+                  <Col>${cart.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
                   <Col>${cart.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
                   <Col>${cart.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
                   <Col>${cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Button
                   type="button"
                   className="btn-block"
-                  disabled={cart.cartItem === 0}
+                  disabled={cart.cartItems === 0}
                   onClick={placeOrderHandler}
                 >
                   Place Order
@@ -151,7 +145,7 @@ const PlaceOrderScreen = () => {
           </Card>
         </Col>
       </Row>
-    </Fragment>
+    </>
   );
 };
 
